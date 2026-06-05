@@ -1,0 +1,39 @@
+
+This document provides a detailed breakdown of the 19 requested features from the HiveGuard final master dataset (`hg_master_v3.csv`). These features fuse real USDA colony loss data with climate, pesticide, and stressor information to predict colony collapse risks.
+
+### Colony Management & Survival Metrics
+These features track the physical inventory and active management interventions taken by beekeepers.
+
+*   **`colony_n`**: An integer representing the number of honey bee colonies managed at the start of the observed quarter.
+*   **`colony_added`**: An integer capturing the number of new colonies that were added to the apiary during the quarter. This includes colonies that were newly purchased, received, or created by splitting existing hives.
+*   **`colony_reno_pct`**: The percentage of colonies that underwent renovation, which typically means they were requeened. This is a critical feature for the machine learning models because it prevents the algorithm from mistakenly conflating a routine apiary management practice (requeening) with raw colony mortality. 
+
+### Multi-Stressor Profile Features
+These features quantify the percentage of colonies in a specific state and quarter that showed symptoms of distinct biological or environmental stressors. Having these stressors horizontally pivoted in the dataset allows the K-Means clustering algorithm to recognize compound-risk geographic zones.
+
+*   **`stress_varroa_mites`**: The percentage of colonies exhibiting active *Varroa destructor* mite infestations. This is the single most critical independent variable in entomological science and the most heavily weighted feature in the Random Forest and Gradient Boosting models. It directly feeds into the forward-chaining Knowledge Base rules (e.g., triggering a "Critical" risk if the percentage exceeds 15% and no treatments were applied).
+*   **`stress_diseases`**: The percentage of colonies affected by pathogenic infections. This umbrella category captures diseases like *Nosema ceranae*, American Foulbrood, European Foulbrood, and Deformed Wing Virus.
+*   **`stress_other_pests_parasites`**: The percentage of colonies showing parasitic loads other than Varroa. This primarily captures infestations by the small hive beetle (*Aethina tumida*) and wax moths.
+*   **`stress_pesticides`**: The percentage of colonies that suffered self-reported or survey-detected pesticide exposure events. 
+*   **`stress_unknown`**: A residual stressor category used to classify colonies that collapsed or showed stress symptoms without a clearly identifiable biological or environmental cause.
+*   **`stress_other`**: Another residual category used for miscellaneous stressors that do not neatly fit into diseases, mites, known pests, or pesticides.
+
+### Honey Production & Economic Proxies
+These features utilize honey yield not for financial modeling, but as proxy biological indicators of hidden colony health.
+
+*   **`yield_per_colony`**: A float representing the honey yield per colony in pounds. It is a key proxy indicator for colony health and foraging efficiency.
+*   **`yield_deviation_pct`**: An engineered early-warning signal calculating the percentage deviation of the current `yield_per_colony` against a rolling 5-year historical baseline for that state. Anomalous drops in yield (e.g., deviations below -15%) are critical signals of subclinical colony stress that often appear 1-2 seasons before a visible collapse event occurs, triggering an upward risk score adjustment in the models.
+
+### Climate & Weather Extremes
+Extreme weather is a top predictor of colony loss. These features are derived from weekly county-level temperature readings that were converted to Celsius and aggregated to align with the quarterly colony data.
+
+*   **`avg_temp_celsius`**: The mean temperature across the quarter, aggregated at the state level.
+*   **`max_temp_celsius`**: The maximum extreme temperature recorded during the quarter. This helps the model evaluate heat stress events that drive brood mortality.
+*   **`min_temp_celsius`**: The minimum temperature recorded during the quarter. This tracks cold stress and the critical thermal thresholds (e.g., below 10°C) that impact winter hive clusters.
+*   **`temp_std`**: The standard deviation of the temperature during the quarter, serving as an indicator of temperature volatility and drastic weather swings.
+*   **`cold_week_ratio`**: A derived ratio representing the proportion of freezing or extremely cold weeks within the quarter. *(Note: While the primary documentation discusses `extreme_cold_weeks` as an absolute count, `cold_week_ratio` is clearly present in the final CSV feature matrix as a normalized float representing this cold-stress frequency).*
+
+### Temporal, Spatial, and Synergy Identifiers
+*   **`quarter`**: A temporal string label (e.g., "January-March", "April-June") establishing the specific time scale of the observation. In the primary schema, this variable is technically named `months`.
+*   **`state_encoded`**: The numerical encoding used to represent geographic location, ensuring compatibility with machine learning inputs. In the HiveGuard data pipeline, this is primarily achieved using the Federal Information Processing Standard (FIPS) codes (`state_fips` or `STATE_CODE`), which act as the crucial spatial join key linking the weather, pesticide, and colony datasets.
+*   **`varroa_pesticide_synergy`**: *(Note: This exact column name does not appear in the raw dataset schema, but the underlying concept is a core requirement of the project)*. The project architecture relies on capturing "interacting factors," noting that Varroa mites and pesticide exposure interact to cause colony decline. The model captures this synergy either through the combined independent features of `stress_varroa_mites` and pesticide loads (`nAllNeonic`/`stress_pesticides`) mapped on the same row, or via an interaction term specifically engineered to mathematically measure the combined destructive impact of these two overlapping stressors.

@@ -1,0 +1,305 @@
+# HiveGuard Logic Architecture — Condensed Reference
+
+---
+
+## 1. Varroa Treatment Constraint Matrix
+
+### Economic Thresholds (ET) for Intervention
+- **Standard:** 2–3% infestation (2–3 mites per 100 bees)
+- **Strict (dormant/population-increase phase):** 1% threshold
+
+---
+
+### 1.1 Formic Acid (Formic Pro / MAQS)
+| Parameter | Value |
+|---|---|
+| Temp Min | 50°F (10°C) |
+| Temp Max | 85°F (29.4°C) |
+| Honey Supers | ✅ Permitted |
+| Penetrates Cappings | ✅ Yes |
+| Duration | 14–20 days |
+| Min Colony Size | 10,000 adult bees (~6 deep Langstroth frames) |
+
+**Rules:**
+- Above 85°F → rapid flash-off → mass brood mortality, absconding, or queen death
+- Below 50°F → sub-therapeutic vapor pressure → ineffective
+- **CONTRAINDICATED** for nucleus colonies or new splits
+- Safe to use with honey supers present
+
+---
+
+### 1.2 Oxalic Acid — Vaporization
+| Parameter | Value |
+|---|---|
+| Temp Min | 37°F (3°C) |
+| Temp Max | None |
+| Honey Supers | ✅ Permitted (EPA-amended label) |
+| Penetrates Cappings | ❌ No |
+| Duration | Immediate (single exposure) |
+
+**Rules:**
+- Must heat to exactly 315°F (157°C) to sublimate
+- Above 372°F (189°C) → decomposes into CO and formic acid derivatives → ineffective + respiratory hazard
+- Traditional use: broodless periods only (contact-only action)
+- EPA (Api-Bioxal) label now permits year-round use including with honey supers
+- ~95% efficacy in broodless state
+- **Optimal for Q4** (late fall/winter dormancy)
+
+---
+
+### 1.3 Oxalic Acid — Extended Release (OAE)
+| Parameter | Value |
+|---|---|
+| Temp Min | None |
+| Temp Max | None |
+| Honey Supers | ✅ Permitted |
+| Penetrates Cappings | ❌ No (acts temporally) |
+| Duration | 40–60 days |
+
+**Rules:**
+- 50% Api-Bioxal + 50% plant-based glycerin on absorbent pads (Swedish sponge/cardboard)
+- Sub-lethal continuous dose kills phoretic mites as they emerge from cells
+- Bypasses brood limitation via extended exposure window
+- Safe summer alternative when formic acid temperature limits apply
+
+---
+
+### 1.4 Amitraz (Apivar)
+| Parameter | Value |
+|---|---|
+| Temp Min | None |
+| Temp Max | None |
+| Honey Supers | ❌ PROHIBITED |
+| Penetrates Cappings | ❌ No |
+| Duration | 42–56 days |
+
+**Rules:**
+- No temperature restrictions → versatile for late-season/cold-weather use
+- Strictly prohibited when honey supers are present (synthetic residues accumulate in wax/honey)
+- Requires full 42–56 days to cover multiple mite reproductive cycles
+- **Resistance tracking REQUIRED:** If Apivar was used in the previous 1–2 treatment cycles → apply heavy efficacy discount → mandate rotation to organic acid or essential oil
+- Resistance is rising rapidly across US Varroa populations (as of 2025–2026)
+
+---
+
+### 1.5 Thymol (Apiguard / ApiLife Var)
+| Parameter | Value |
+|---|---|
+| Temp Min | 59°F |
+| Temp Max | 85–100°F (product-dependent) |
+| Honey Supers | ❌ PROHIBITED |
+| Penetrates Cappings | ❌ No |
+| Duration | 28 days |
+
+**Rules:**
+- Above max temp → uncontrolled vapor release → aggressive bearding, brood removal, colony agitation
+- Imparts permanent odor/taste to honey and wax
+- **Mandatory withdrawal period:** minimum 2 weeks after treatment ends before adding supers
+- Fumigant effect drives bees downward → temporarily suppresses uptake of liquid feed from top feeders
+
+---
+
+### 1.6 Hop Beta Acids (HopGuard 3)
+| Parameter | Value |
+|---|---|
+| Temp Min | 50°F (10°C) |
+| Temp Max | None |
+| Honey Supers | ✅ Permitted |
+| Penetrates Cappings | ❌ No |
+| Duration | 14 days (repeatable) |
+
+**Rules:**
+- Below 50°F → bees not actively moving → contact material not spread
+- Safe with honey supers (strong botanical odor may temporarily affect honey smell)
+- No brood penetration → severely limited efficacy during peak brood season
+- **If brood is present:** schedule repeat applications at 2-week intervals for effective mite knockdown
+
+---
+
+## 2. Seasonal Colony State Logic
+
+### Q1: Overwintering & Early Brood Initiation (January–March)
+**Biological State:**
+- Winter cluster (thermoregulating via isometric muscle contractions)
+- Brood rearing triggers ~mid-February (lengthening daylight) even in freezing temperatures
+- Brood core must be maintained at exactly 95°F (35°C)
+- Colony relies entirely on stored honey (carbs) and pollen/fat bodies (protein)
+
+**Primary Risk:** Starvation (especially isolation starvation — cluster immobilized by cold snap, cannot reach adjacent honey)
+
+**Algorithmic Rules:**
+- `IF (Ambient_Temp < 50°F) THEN Suppress_Physical_Inspection_Alerts = TRUE`
+- If telemetry shows rapid weight loss → prescribe solid carbohydrate feed (fondant or dry sugar)
+- **Liquid syrup CONTRAINDICATED** in freezing temperatures (bees cannot metabolize or dehydrate it)
+- Oxalic acid dribble or vaporization can be applied early Q1 before first spring brood is capped (natural broodless window)
+
+---
+
+### Q2: Population Explosion & Swarm Ecology (April–June)
+**Biological State:**
+- Queen at peak fecundity: up to 2,000 eggs/day
+- Colony expands to 50,000–80,000 individuals
+- Varroa population begins exponential growth phase (doubles every 3–4 weeks)
+
+**Primary Risk:** Swarming (loss of 50–70% workforce and honey reserves before summer nectar flow)
+
+**Algorithmic Rules:**
+- Track hive weight changes and acoustic signatures for congestion indicators
+- Prescriptive swarm prevention actions: add supers, reverse hive bodies, execute artificial splits
+- Varroa intervention threshold: **2–3%** (population-increase phase)
+- Schedule routine alcohol wash mite sampling
+
+---
+
+### Q3: Peak Population, Harvest & Decline (July–September)
+**Biological State:**
+- Colony population peaks in July, then contracts (queen reduces oviposition with shortening days)
+- Mite population simultaneously reaches absolute peak → mite-to-bee ratio spikes
+- Mites forced onto adult bees as brood slows → accelerates DWV vectoring
+
+**Primary Risk:** Varroa-induced colony collapse; failure to rear healthy winter bees
+
+**Algorithmic Rules:**
+- Detect end of nectar flow → coordinate honey harvest with pest intervention
+- **Goal:** Suppress Varroa load by mid-August to September to ensure healthy winter bee cohort
+- `IF (Temp < 85°F) → Primary recommendation: Formic Pro`
+- `IF (Honey supers removed) → Primary recommendation: Apivar`
+- Flag this window as urgent/high-priority intervention
+
+---
+
+### Q4: Winter Preparation & Dormancy (October–December)
+**Biological State:**
+- Brood rearing ceases by late October/November
+- Colony relies on winter bees (hypertrophied fat bodies, high vitellogenin for longevity and immunity)
+
+**Primary Risk:** Delayed manifestation of Q3 failures — high mite loads drain winter bee fat bodies → winter collapse; late-season robbing
+
+**Algorithmic Rules:**
+- Install entrance reducers and robbing screens
+- Final "cleanup" OA vaporization treatment: ~95% efficacy in broodless state, low cost, low temperature requirements
+- After cleanup treatment: suppress inspection alerts — hive should remain sealed
+
+---
+
+## 3. Varroa–Pesticide Synergy: IF-THEN Triggers
+
+### Physiological Mechanism Summary
+- Varroa primarily consumes honey bee **fat body** (not hemolymph)
+- Fat body synthesizes vitellogenin (governs immunity, longevity, detox) and cytochrome P450 monooxygenase enzymes (xenobiotic detoxification)
+- One mite removes ~0.86 μL fat body tissue over 1.5 hours; feeds for ~7 days on one bee
+- Varroa-parasitized bees lose P450 enzyme capacity → sublethal pesticide doses become **lethal**
+- Varroa feeding downregulates the **Toll signaling pathway** (innate immunity) → secondary stressors (Nosema, fungicides, neonicotinoids) cause rapid physiological collapse
+
+> **Critical Model Rule:** Varroa load and pesticide exposure must be evaluated as a **multiplicative risk tensor**, NOT additive.
+
+---
+
+### Synergy Trigger Table
+
+| Trigger | Logic Condition | Prescriptive Action |
+|---|---|---|
+| **Neonicotinoid Tipping Point** | Mite_Load ≥ 2.0% AND Proximity_to_Neonicotinoid_Spray == TRUE AND Pesticide IN [Imidacloprid, Flupyradifurone] | Risk_Score = Base × 5.0; Flag: "CRITICAL: Detoxification failure expected. Immediate Varroa knockdown required." |
+| **P450 Enzyme Inhibition Loop** | Active_Hive_Treatment IN [Fluvalinate, Coumaphos, Amitraz] AND Forage_Radius_Contains_SBI_Fungicide == TRUE | Risk_Multiplier = 5.0; Flag: "CONTRAINDICATION: Fungicide inhibits P450 enzymes. In-hive miticide will become acutely toxic." |
+| **Cyanoamidine Synergy Spike** | Cyanoamidine neonicotinoid AND SBI fungicide co-present | Risk_Score = Base × 1,000; Flag: "LETHAL SYNERGY: 1,141-fold toxicity increase detected. Relocate apiary immediately." |
+| **Nutritional Immune Rescue** | Pesticide_Exposure_Risk == HIGH AND Pollen_Flow_Index < 0.5 AND Temp_Permits_Mite_Treatment == FALSE | Prescribe: "Administer high-protein pollen substitute to bolster fat body vitellogenin and support P450 pathways." |
+
+**Specific known synergy multipliers:**
+- Flupyradifurone + propiconazole (fungicide) → **5× toxicity increase**
+- Cyanoamidine neonicotinoid + SBI fungicide → **1,141× toxicity increase**
+
+---
+
+## 4. CNN Visual Pathology Detection Targets
+
+### 4.1 Deformed Wing Virus (DWV) — Adult Bees
+**Detection targets:**
+- Twisted, crumpled, or shriveled wings (reduced to small stubs)
+- Wing venation edge discontinuities and structural asymmetry
+- Bloated, shortened, or rounded abdomens (stubby body profile)
+- Pigmentation anomalies: discoloration of legs and wings (secondary feature)
+
+**Rule:** A **single** DWV-symptomatic bee detected on the landing board = colony-wide crisis indicator (DWV bees are rapidly removed by healthy workers). Trigger immediate high-priority alert to the Tabular model — bypass standard mite sampling delays.
+
+---
+
+### 4.2 K-Wing (Tracheal Mites / Nosema / Viral Complex) — Adult Bees
+**Detection targets:**
+- Wings unhooked and asymmetrical, resting at irregular angles (letter 'K' shape)
+- Angular vector of forewing and hindwing significantly deviates from standard thorax-axis geometry
+- Behavioral correlation: bees crawling, trembling, morbid, unable to fly on landing board
+- Fecal spotting (dark brown/yellow dysentery streaks) on front face of hive → strongly correlated with Nosema infection
+
+---
+
+### 4.3 Parasitic Mite Syndrome (PMS) / Brood Pathologies — Comb Inspection
+**Detection targets:**
+- **Chewed-out/sunken brood:** Pupae appearing melted or sunken in cells (worker bees aborting severely infected pupae)
+- **Bald brood:** Uncapped pupae cells with prematurely removed wax cappings (hygienic response to mite reproduction)
+- **Sacbrood virus:** Larvae dead prior to pupation, turned grey or yellow, fluid-filled sac appearance, dark head curled upward toward cell opening
+
+---
+
+## 5. Intervention Cost & Effort Scoring
+
+**Formula:** `C_int = w1(Financial) + w2(Labor) + w3(BiologicalStress)`
+
+Score is normalized 1–100. Higher score = algorithm deprioritizes the action.
+
+| Intervention | Base Cost Score | Labor | Biological Stress | Algorithmic Heuristic |
+|---|---|---|---|---|
+| Supplemental Feeding (Syrup/Pollen) | 10 | Low | Net Positive (bolsters fat bodies & vitellogenin) | First-line defense against dearth, weather anomalies, nutritional deficits |
+| Oxalic Acid Vaporization | 30 | Medium (heavy PPE, battery/vaporizer required) | Very Low (excellent bee tolerance, minimal brood disruption) | Ideal late fall/winter; highly scalable for commercial apiaries |
+| Formic Pro Application | 45 | Low (quick pad insertion) | High (fume volatility, risk of queen mortality, brood death) | Only when honey supers present AND mite load requires emergency knockdown |
+| Full Colony Inspection + Alcohol Wash | 55 | High (disassemble hive, sacrifice 300 bees, manual count) | Low (300 bees = statistically negligible loss) | Necessary diagnostic step; scored high to prevent over-frequent inspections |
+| Requeening | 80 | Very High (find/cull old queen, purchase mated queen ~$40+, manage rejection risk) | High (temporary brood break, disrupts pheromonal cohesion) | Last resort: advanced disease profile, failing brood pattern, unmanageable defensive genetics |
+| Hive Relocation / Split | 95 | Extreme (heavy lifting, vehicular transport, move 3+ miles) | High (mass forager disorientation, complete spatial restructuring) | Only for severe density-based pathogen transmission risk or imminent lethal spray exposure |
+
+---
+
+## 6. Strict Contraindications & Hard Rules
+
+### 6.1 Treatment Combination Rules
+- **NEVER** apply two different Varroa treatments simultaneously (does not produce additive mite mortality; causes severe bee toxicity)
+- **NEVER** apply a synthetic miticide (Apivar/Amitraz) simultaneously with a fumigant essential oil (Apiguard/Thymol) → enzymatic overload, extreme oxidative stress, severe mortality
+- **NEVER** apply two different formulations of the same active ingredient at the same time
+- **Mandatory recovery buffer:** minimum **4-week recovery period** between end of one treatment and start of the next (unless product label specifies otherwise)
+
+### 6.2 Antibiotic Interaction Rules
+- If antibiotic administered (e.g., Terramycin for Foulbrood) → delay Varroa treatment by **2–4 weeks** depending on colony strength
+- **Terramycin legal dose:** exactly 200 mg, applied 3 times at precise 4–5 day intervals
+- **Generate calendar events for antibiotic intervals** — missed doses → antibiotic-resistant bacterial strains
+
+### 6.3 Fungicide × Miticide Contraindication
+- If apiary proximity data indicates recent spraying of SBI fungicides (prochloraz, propiconazole, myclobutanil, triflumizole) on nearby crops (apples, almonds):
+  - Application of **fluvalinate or coumaphos is STRICTLY FORBIDDEN**
+  - SBI fungicides inhibit the P450 enzymes that protect bees from pyrethroid and organophosphate neurotoxins → treatment becomes acute mortality event
+
+### 6.4 Feeding Protocol Rules
+- Fumigant treatments (Formic Pro, MAQS, Thymol) drive bees downward, away from top-feeders
+- **Rule:** Delay placement of liquid feed until **3–4 days post-application** (peak fumigation flash-off period)
+- Liquid syrup **CONTRAINDICATED** in freezing/near-freezing temperatures (bees cannot metabolize or dehydrate it)
+
+### 6.5 Chemical Rotation Mandate
+- Mandate alternation of active ingredients across different modes of action to combat resistance
+- Example rotation: Amitraz (synthetic) → Oxalic Acid (organic) → Thymol or Formic Acid
+- `IF (Apivar used in previous fall) THEN prioritize alternative chemical class for next fall treatment`
+
+### 6.6 Inspection Suppression Rule
+- `IF (Ambient_Temp < 50°F) THEN Suppress_Physical_Inspection_Alerts = TRUE` (prevent breaking winter cluster thermal seal)
+- Post-final-OA-treatment in Q4: suppress all further inspection alerts → hive remains sealed until spring
+
+---
+
+## 7. Mechanical & Cultural IPM Controls
+
+The system must integrate non-chemical controls alongside chemical modeling:
+
+| Control | Biological Stress | Effect |
+|---|---|---|
+| Screen bottom boards | None | Reduces phoretic mite survival |
+| Drone brood culling | Low | Removes frames where Varroa preferentially breed (longer gestation in drone cells) |
+| Queen isolation / brood break | Low–Medium | Forces broodless window; increases OA treatment efficacy |
+| Entrance reducer / robbing screen | None | Prevents introduction of mites via robbing behavior (especially Q4) |
+
+These carry low biological stress costs but provide significant fractional reductions in the simulated mite population growth curve — integral to integrated pest management (IPM) optimization.

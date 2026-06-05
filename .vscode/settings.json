@@ -1,0 +1,6 @@
+{
+    "python.defaultInterpreterPath": "C:\\Users\\Najaf\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+    "python.analysis.extraPaths": [
+        "c:\\Users\\Najaf\\Downloads\\HiveGuard_Updated\\HiveGuard\\HiveGuard\\backend"
+    ]
+}
