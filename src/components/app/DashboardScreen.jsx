@@ -79,24 +79,25 @@ export default function DashboardScreen() {
         {/* Quick Actions */}
         <p className="section-title" style={{ marginTop: 20 }}>Choose Analysis Mode</p>
 
-        <button
-          className="btn btn--primary"
-          onClick={() => showScreen('tabular')}
-          id="btn-full-analysis"
-        >
-          <Microscope size={22} />
-          Full Hive Analysis
-        </button>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <button
+            className="btn btn--primary"
+            onClick={() => showScreen('tabular')}
+            id="btn-full-analysis"
+          >
+            <Microscope size={22} />
+            Full Hive Analysis
+          </button>
 
-        <button
-          className="btn btn--secondary"
-          onClick={() => showScreen('vision')}
-          id="btn-scan-disease"
-        >
-          <Camera size={22} className="text-honey" />
-          Standalone Disease Scan
-        </button>
-
+          <button
+            className="btn btn--secondary"
+            onClick={() => showScreen('vision')}
+            id="btn-scan-disease"
+          >
+            <Camera size={22} className="text-honey" />
+            Standalone Disease Scan
+          </button>
+        </div>
       </div>
     </div>
   );

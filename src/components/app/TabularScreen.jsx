@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import {
   ArrowLeft, Thermometer, AlertTriangle, CheckCircle, MapPin,
   Brain, Loader2, Droplets, Box, Building2, Upload, X, Camera, Info
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
+import ImageOrientationModal from '../ImageOrientationModal';
 
 const TooltipIcon = ({ text }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -87,8 +88,17 @@ export default function TabularScreen() {
     formData.fungicide_proximity !== null &&
     formData.honey_supers !== null;
 
+  const [pendingFiles, setPendingFiles] = useState(null);
+  const [pendingPreview, setPendingPreview] = useState(null);
+
+  const openModal = useCallback((files) => {
+    if (!files || files.length === 0) return;
+    setPendingFiles(files);
+    setPendingPreview(URL.createObjectURL(files[0]));
+  }, []);
+
   const onFileChange = (e) => {
-    if (e.target.files?.length > 0) handleAnalysisImages(e.target.files);
+    if (e.target.files?.length > 0) openModal(e.target.files);
   };
 
   const onRemoveImage = (e) => {
@@ -96,6 +106,26 @@ export default function TabularScreen() {
     removeAnalysisImages();
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
+
+  const handleModalConfirm = useCallback((rotationDeg) => {
+    if (!pendingFiles) return;
+    if (rotationDeg === 0) {
+      handleAnalysisImages(pendingFiles);
+    } else {
+      applyRotationAndAdd(pendingFiles[0], rotationDeg, handleAnalysisImages);
+    }
+    URL.revokeObjectURL(pendingPreview);
+    setPendingFiles(null);
+    setPendingPreview(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  }, [pendingFiles, pendingPreview, handleAnalysisImages]);
+
+  const handleModalCancel = useCallback(() => {
+    URL.revokeObjectURL(pendingPreview);
+    setPendingFiles(null);
+    setPendingPreview(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  }, [pendingPreview]);
 
   return (
     <div className="app-screen" key="tabular">
@@ -379,6 +409,42 @@ export default function TabularScreen() {
           )}
         </button>
       </div>
+        {/* Orientation Modal */}
+      {pendingPreview && (
+        <ImageOrientationModal
+          imageUrl={pendingPreview}
+          onConfirm={handleModalConfirm}
+          onCancel={handleModalCancel}
+        />
+      )}
     </div>
   );
+}
+
+/** Applies CSS rotation to an image via canvas and returns a File blob */
+function applyRotationAndAdd(file, degrees, callback) {
+  const img = new Image();
+  const url = URL.createObjectURL(file);
+  img.onload = () => {
+    const rad = (degrees * Math.PI) / 180;
+    const sin = Math.abs(Math.sin(rad));
+    const cos = Math.abs(Math.cos(rad));
+    const newW = Math.round(img.width * cos + img.height * sin);
+    const newH = Math.round(img.width * sin + img.height * cos);
+    const canvas = document.createElement('canvas');
+    canvas.width = newW;
+    canvas.height = newH;
+    const ctx = canvas.getContext('2d');
+    ctx.translate(newW / 2, newH / 2);
+    ctx.rotate(rad);
+    ctx.drawImage(img, -img.width / 2, -img.height / 2);
+    canvas.toBlob((blob) => {
+      const rotatedFile = new File([blob], file.name, { type: file.type });
+      const dt = new DataTransfer();
+      dt.items.add(rotatedFile);
+      callback(dt.files);
+      URL.revokeObjectURL(url);
+    }, file.type);
+  };
+  img.src = url;
 }

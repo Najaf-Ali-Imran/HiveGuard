@@ -11,7 +11,8 @@
 :root {
   /* Core Brand Colors */
   --color-honey: #FA8112;
-  --color-honey-dark: #c9670d; /* slightly darker for hover states */
+  --color-honey-dark: #c9670d;
+  /* slightly darker for hover states */
   --color-black: #222222;
   --color-cream-light: #FAF3E1;
   --color-cream-dark: #FAF3E1;
@@ -286,26 +287,63 @@ img {
 }
 
 @keyframes honeyFill {
-  0%, 100% { fill: transparent; }
-  50% { fill: var(--honey-glow); }
+
+  0%,
+  100% {
+    fill: transparent;
+  }
+
+  50% {
+    fill: var(--honey-glow);
+  }
 }
 
 @keyframes beeBuzz {
-  0%, 100% { fill: transparent; }
-  5%, 15% { fill: var(--bee-color); }
+
+  0%,
+  100% {
+    fill: transparent;
+  }
+
+  5%,
+  15% {
+    fill: var(--bee-color);
+  }
 }
 
 /* Distribute honey filling (slow pulse) across random prime cells */
-.bg-hexagon:nth-child(11n) polygon { animation: honeyFill 14s infinite ease-in-out 2s; }
-.bg-hexagon:nth-child(13n) polygon { animation: honeyFill 18s infinite ease-in-out 5s; }
-.bg-hexagon:nth-child(17n) polygon { animation: honeyFill 22s infinite ease-in-out 1s; }
-.bg-hexagon:nth-child(19n) polygon { animation: honeyFill 16s infinite ease-in-out 7s; }
-.bg-hexagon:nth-child(23n) polygon { animation: honeyFill 25s infinite ease-in-out 4s; }
+.bg-hexagon:nth-child(11n) polygon {
+  animation: honeyFill 14s infinite ease-in-out 2s;
+}
+
+.bg-hexagon:nth-child(13n) polygon {
+  animation: honeyFill 18s infinite ease-in-out 5s;
+}
+
+.bg-hexagon:nth-child(17n) polygon {
+  animation: honeyFill 22s infinite ease-in-out 1s;
+}
+
+.bg-hexagon:nth-child(19n) polygon {
+  animation: honeyFill 16s infinite ease-in-out 7s;
+}
+
+.bg-hexagon:nth-child(23n) polygon {
+  animation: honeyFill 25s infinite ease-in-out 4s;
+}
 
 /* Distribute fast bee buzzes across rarer prime cells */
-.bg-hexagon:nth-child(37n) polygon { animation: beeBuzz 20s infinite ease-in-out 3s; }
-.bg-hexagon:nth-child(41n) polygon { animation: beeBuzz 28s infinite ease-in-out 8s; }
-.bg-hexagon:nth-child(47n) polygon { animation: beeBuzz 15s infinite ease-in-out 12s; }
+.bg-hexagon:nth-child(37n) polygon {
+  animation: beeBuzz 20s infinite ease-in-out 3s;
+}
+
+.bg-hexagon:nth-child(41n) polygon {
+  animation: beeBuzz 28s infinite ease-in-out 8s;
+}
+
+.bg-hexagon:nth-child(47n) polygon {
+  animation: beeBuzz 15s infinite ease-in-out 12s;
+}
 
 /* Mesh animated blobs */
 .background-texture__blob {
@@ -348,10 +386,21 @@ img {
 }
 
 @keyframes blobFloat {
-  0% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(30px, -20px) scale(1.05); }
-  66% { transform: translate(-20px, 15px) scale(0.95); }
-  100% { transform: translate(10px, -10px) scale(1.02); }
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  33% {
+    transform: translate(30px, -20px) scale(1.05);
+  }
+
+  66% {
+    transform: translate(-20px, 15px) scale(0.95);
+  }
+
+  100% {
+    transform: translate(10px, -10px) scale(1.02);
+  }
 }
 
 
@@ -372,6 +421,8 @@ img {
   flex-direction: column;
   overflow: hidden;
   flex-shrink: 0;
+  /* Creates a containing block for position:fixed children (modal overlay) */
+  transform: translate(0, 0);
   transition: background-color var(--transition-slow), border-color var(--transition-slow), box-shadow var(--transition-slow);
 }
 
@@ -420,23 +471,26 @@ img {
 }
 
 /* ============================================
-   App Screen Transitions
+   App Screen — fills remaining space, scrolls inside
    ============================================ */
 .app-screen {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
   animation: screenFadeIn 0.3s ease forwards;
 }
+
+
 
 @keyframes screenFadeIn {
   from {
     opacity: 0;
-    transform: translateX(16px);
   }
+
   to {
     opacity: 1;
-    transform: translateX(0);
   }
 }
 
@@ -763,10 +817,6 @@ img {
   background: rgba(186, 26, 26, 0.08);
 }
 
-.btn + .btn {
-  margin-top: 10px;
-}
-
 /* ============================================
    Form Elements
    ============================================ */
@@ -1055,7 +1105,9 @@ img {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .loader__title {
@@ -1283,10 +1335,8 @@ img {
    Bottom Navigation
    ============================================ */
 .bottom-nav {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  /* Pinned to the bottom of the flex column — never scrolls away */
+  flex-shrink: 0;
   background: var(--bg-bottom-nav);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -2097,8 +2147,13 @@ img {
 }
 
 @keyframes fillBar {
-  from { width: 0; }
-  to { width: var(--fill); }
+  from {
+    width: 0;
+  }
+
+  to {
+    width: var(--fill);
+  }
 }
 
 /* ============================================
@@ -2390,6 +2445,7 @@ img {
     opacity: 0;
     transform: translateY(16px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -2481,6 +2537,7 @@ img {
    Mobile Responsive Rules
    ============================================ */
 @media screen and (max-width: 768px) {
+
   .navbar,
   .background-texture {
     display: none !important;
@@ -2507,4 +2564,258 @@ img {
   .app-container {
     padding-top: 0 !important;
   }
+}
+
+/* ============================================
+   Image Orientation Modal
+   ============================================ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: overlayFadeIn 0.2s ease;
+}
+
+@keyframes overlayFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-sheet {
+  background: var(--bg-surface);
+  border-radius: 34px 34px 34px 34px;
+  width: 100%;
+  max-width: 430px;
+  /* Capped height so buttons stay visible above the bottom nav */
+  max-height: 80vh;
+  overflow-y: auto;
+  display: flex;
+  margin-bottom: 50px;
+  flex-direction: column;
+  animation: sheetSlideUp 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+  box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes sheetSlideUp {
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+.modal-sheet__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 20px 20px 12px;
+}
+
+.modal-sheet__title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 2px;
+}
+
+.modal-sheet__subtitle {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.modal-sheet__close {
+  background: var(--bg-card-alt);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+
+.modal-sheet__close:hover {
+  background: var(--border-default);
+}
+
+.modal-sheet__body {
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modal-sheet__footer {
+  padding: 10px 16px 20px;
+  /* Huge padding to push buttons up past the nav bar */
+  display: flex;
+  gap: 10px;
+}
+
+/* Preview area */
+.orientation-preview-wrap {
+  background: var(--bg-card-alt);
+  border-radius: 12px;
+  min-height: 140px;
+  max-height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.orientation-preview-img {
+  max-width: 90%;
+  max-height: 140px;
+  object-fit: contain;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border-radius: 8px;
+}
+
+/* Rotate controls */
+.orientation-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.orientation-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  background: var(--bg-card-alt);
+  border: 1px solid var(--border-default);
+  border-radius: 12px;
+  padding: 8px 16px;
+  color: var(--text-primary);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.orientation-btn:hover {
+  background: rgba(250, 129, 18, 0.1);
+  border-color: var(--color-honey);
+  color: var(--color-honey);
+  transform: scale(1.05);
+}
+
+.orientation-btn:active {
+  transform: scale(0.96);
+}
+
+.orientation-angle-badge {
+  background: var(--color-honey);
+  color: var(--color-black);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 4px 14px;
+  border-radius: 20px;
+  min-width: 52px;
+  text-align: center;
+}
+
+/* Orientation guide infographic */
+.orientation-guide {
+  background: var(--bg-card-alt);
+  border-radius: 14px;
+  border: 1px solid var(--border-default);
+  overflow: hidden;
+}
+
+.orientation-guide__header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  background: rgba(250, 129, 18, 0.08);
+  border-bottom: 1px solid var(--border-default);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.orientation-guide__examples {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 16px 12px;
+  gap: 8px;
+}
+
+.orientation-guide__vs {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.orientation-example {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+}
+
+.orientation-example__frame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  border-radius: 10px;
+  border: 2px solid;
+}
+
+.orientation-example--good .orientation-example__frame {
+  background: rgba(34, 197, 94, 0.08);
+  border-color: rgba(34, 197, 94, 0.4);
+}
+
+.orientation-example--bad .orientation-example__frame {
+  background: rgba(239, 68, 68, 0.08);
+  border-color: rgba(239, 68, 68, 0.35);
+}
+
+.orientation-example__label {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.orientation-example__label--good {
+  color: #22c55e;
+}
+
+.orientation-example__label--bad {
+  color: #ef4444;
+}
+
+.orientation-example__desc {
+  font-size: 10px;
+  color: var(--text-tertiary);
+  text-align: center;
+  line-height: 1.3;
 }
